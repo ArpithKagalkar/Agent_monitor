@@ -212,10 +212,12 @@ def test_protected_blocks_then_safe_retry(tmp_path, tool_server, stub_gateway):
         assert isinstance(last, ToolMessage) and "DENIED" in last.content and "approved-crm" in last.content
         return AIMessage(content="", tool_calls=[{"name": "send_to_crm", "args": COMPLIANT_CALL, "id": "c2"}])
 
-    llm = ScriptedLLM([_call("send_to_crm", VIOLATING_CALL, "c1"), retry,
-                       lambda m: AIMessage(content="exported minimal profile")])
+    leaky = "Exported Aylin Demir (aylin@greenkiln.example). Note: recovering from surgery and prefers short meetings"
+    llm = ScriptedLLM([_call("send_to_crm", VIOLATING_CALL, "c1"), retry, lambda m: AIMessage(content=leaky)])
     run = asyncio.run(run_agent("task", "protected", settings=s, llm=llm))
     assert run["status"] == "completed", run
+    assert run["final_answer"] == leaky  # returned to the caller...
+    assert Store(s.db_path).get_run(run["run_id"])["final_answer"] is None  # ...but never stored
     assert (run["attempted_count"], run["block_count"], run["executed_count"]) == (2, 1, 1)
     assert [f["destination"] for f in forwarded] == ["approved-crm"]  # blocked call never forwarded
 
@@ -225,6 +227,7 @@ def test_protected_blocks_then_safe_retry(tmp_path, tool_server, stub_gateway):
     assert st.violations(run["run_id"])[0]["rule_id"] == "DESTINATION_NOT_APPROVED"
     dump = "\n".join(str(r) for r in sqlite3.connect(s.db_path).iterdump())
     assert "surgery" not in dump and "+49" not in dump  # no raw lead values in evidence
+    assert "Aylin Demir" not in dump and "aylin@greenkiln.example" not in dump  # final answer redacted
 
 
 def test_enforcement_test_zero_then_one_execution(tmp_path, tool_server, stub_gateway):

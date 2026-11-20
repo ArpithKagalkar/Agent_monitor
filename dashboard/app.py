@@ -206,8 +206,10 @@ def live_view() -> None:
             else:
                 st.markdown(f"`{e['step']:>2}` :gray[:material/info: {s.get('message', '')}]")
         if run["final_answer"]:
-            with st.expander("Agent's final answer"):
-                st.write(run["final_answer"])
+            st.caption(run["final_answer"])
+        elif run["kind"] == "agent" and run["status"] == "completed":
+            st.caption("The agent's free-text answer is not stored, because it may repeat lead data. "
+                       "It is printed in the run log.")
         if run["error"]:
             st.error(run["error"], title="Run failed")
 

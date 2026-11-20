@@ -182,13 +182,30 @@ def _describe(exc: BaseException, url: str) -> str:
     return f"{type(exc).__name__}: {exc}"
 
 
+def _sensitive_values() -> list[str]:
+    """Personal and special-category values from the synthetic fixtures, longest first."""
+    data = json.loads((config.ROOT / "fixtures" / "leads.json").read_text(encoding="utf-8"))
+    sensitive = {k for k, c in data["field_classification"].items() if c in {"personal_data", "special_category"}}
+    values = {str(lead[k]) for lead in data["leads"] for k in sensitive if lead.get(k)}
+    return sorted(values, key=len, reverse=True)
+
+
+def redact(text: str | None) -> str | None:
+    """Strip exact fixture values from error text before it is stored (spec section 10)."""
+    if not text:
+        return text
+    for value in _sensitive_values():
+        text = text.replace(value, "[redacted]")
+    return text
+
+
 def _finish(store: Store, settings: config.Settings, rec: Recorder, status: str,
             final_answer: str | None = None, error: str | None = None) -> dict[str, Any]:
     verified = verified_executions(settings, rec.run_id)
     if verified is None:
         rec.info("Could not read the tool server log; executed count is the agent's observation only.")
     store.end_run(rec.run_id, status, executed_count=verified if verified is not None else rec.observed_executions,
-                  final_answer=final_answer, error=error)
+                  final_answer=final_answer, error=redact(error))
     return store.get_run(rec.run_id) or {}
 
 
@@ -215,7 +232,10 @@ async def run_agent(task: str = DEFAULT_TASK, mode: str = "protected", *, settin
             except GraphRecursionError:
                 final = f"Stopped after the {max_steps}-step limit."
                 rec.info(final)
-        return _finish(store, settings, rec, "completed", final_answer=final)
+        # The model's free text can paraphrase lead data, which no redaction catches reliably,
+        # so it is printed for the operator but never written to the evidence DB.
+        result = _finish(store, settings, rec, "completed")
+        return {**result, "final_answer": final}
     except Exception as exc:
         # In protected mode an unreachable gateway lands here: the run fails closed, nothing is forwarded.
         err = _describe(exc, settings.mcp_url(mode))
