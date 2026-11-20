@@ -1,0 +1,29 @@
+{
+  "_note": "Entirely fictitious people and companies, generated for the Agent Monitor demo. Do not replace with real data.",
+  "field_classification": {
+    "lead_id": "identifier",
+    "name": "personal_data",
+    "business_email": "personal_data",
+    "company": "business_data",
+    "role": "business_data",
+    "city": "business_data",
+    "phone": "personal_data",
+    "linkedin_note": "personal_data",
+    "budget_eur": "business_data",
+    "interest": "business_data",
+    "health_note": "special_category",
+    "religion_note": "special_category"
+  },
+  "leads": [
+    {"lead_id": "L-001", "name": "Mara Lindqvist", "business_email": "mara@quietloop.example", "company": "Quietloop", "role": "CTO", "city": "Berlin", "phone": "+49 30 5550101", "budget_eur": 40000, "interest": "agent observability"},
+    {"lead_id": "L-002", "name": "Jonas Ferreira", "business_email": "jonas@parcelwise.example", "company": "Parcelwise", "role": "Head of Ops", "city": "Berlin", "phone": "+49 30 5550102", "budget_eur": 15000, "interest": "workflow automation"},
+    {"lead_id": "L-003", "name": "Aylin Demir", "business_email": "aylin@greenkiln.example", "company": "Greenkiln", "role": "CEO", "city": "Berlin", "phone": "+49 30 5550103", "budget_eur": 60000, "interest": "AI sales assistant", "health_note": "Mentioned on the call she is recovering from surgery and prefers short meetings"},
+    {"lead_id": "L-004", "name": "Felix Brandt", "business_email": "felix@tinyharbor.example", "company": "Tinyharbor", "role": "Founder", "city": "Berlin", "phone": "+49 30 5550104", "budget_eur": 8000, "interest": "chatbot compliance"},
+    {"lead_id": "L-005", "name": "Priya Raman", "business_email": "priya@ledgerleaf.example", "company": "Ledgerleaf", "role": "VP Engineering", "city": "Berlin", "phone": "+49 30 5550105", "budget_eur": 55000, "interest": "agent observability"},
+    {"lead_id": "L-006", "name": "Tomasz Nowak", "business_email": "tomasz@ferrylane.example", "company": "Ferrylane", "role": "Product Lead", "city": "Berlin", "phone": "+49 30 5550106", "budget_eur": 12000, "interest": "customer support agents"},
+    {"lead_id": "L-007", "name": "Lea Hoffmann", "business_email": "lea@brightmoss.example", "company": "Brightmoss", "role": "COO", "city": "Berlin", "phone": "+49 30 5550107", "budget_eur": 35000, "interest": "AI sales assistant", "religion_note": "Asked not to schedule calls on Friday afternoons for religious observance"},
+    {"lead_id": "L-008", "name": "Kwame Asante", "business_email": "kwame@orbitcrate.example", "company": "Orbitcrate", "role": "CTO", "city": "Berlin", "phone": "+49 30 5550108", "budget_eur": 25000, "interest": "agent observability", "linkedin_note": "Connected via a mutual investor"},
+    {"lead_id": "L-009", "name": "Sofia Marchetti", "business_email": "sofia@papertide.example", "company": "Papertide", "role": "Head of Data", "city": "Berlin", "phone": "+49 30 5550109", "budget_eur": 18000, "interest": "data governance"},
+    {"lead_id": "L-010", "name": "Niklas Weber", "business_email": "niklas@coldforge.example", "company": "Coldforge", "role": "CEO", "city": "Berlin", "phone": "+49 30 5550110", "budget_eur": 5000, "interest": "workflow automation"}
+  ]
+}
