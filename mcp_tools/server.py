@@ -8,6 +8,10 @@ UNPROTECTED TEST.
 Run:  python -m mcp_tools.server
 MCP endpoint:  http://127.0.0.1:8100/mcp
 Admin (not exposed as tools):  GET /health, GET /state, POST /state/reset
+
+Run attribution: the caller sends the run id in the HTTP header
+``X-Agent-Monitor-Run-Id``. It is deliberately not a tool argument, so the
+tool signatures match the frozen contract and the model never sees it.
 """
 
 from __future__ import annotations
@@ -17,7 +21,7 @@ import os
 from pathlib import Path
 from typing import Any
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.fastmcp import Context, FastMCP
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
@@ -27,6 +31,7 @@ FIXTURES = Path(__file__).resolve().parent.parent / "fixtures" / "leads.json"
 
 HOST = os.environ.get("MCP_TOOLS_HOST", "127.0.0.1")
 PORT = int(os.environ.get("MCP_TOOLS_PORT", "8100"))
+RUN_ID_HEADER = "x-agent-monitor-run-id"
 
 mcp = FastMCP(
     "agent-monitor-tools",
@@ -104,6 +109,14 @@ def send_email_impl(to: str, subject: str, body: str, run_id: str | None = None)
 
 # ---- MCP tool wrappers ---------------------------------------------------
 
+def _run_id(ctx: Context | None) -> str | None:
+    try:
+        request = ctx.request_context.request if ctx else None
+    except (AttributeError, ValueError, LookupError):
+        return None
+    return request.headers.get(RUN_ID_HEADER) if request is not None else None
+
+
 @mcp.tool()
 def search_leads(query: str = "") -> list[dict[str, Any]]:
     """Search synthetic Berlin startup leads by keyword (name, company, role, interest). Empty query returns all."""
@@ -117,21 +130,21 @@ def get_lead(lead_id: str) -> dict[str, Any]:
 
 
 @mcp.tool()
-def send_to_crm(lead_id: str, fields: list[str], destination: str, run_id: str | None = None) -> dict[str, Any]:
+def send_to_crm(lead_id: str, fields: list[str], destination: str, ctx: Context) -> dict[str, Any]:
     """Export the chosen fields of a lead to a CRM destination (e.g. 'approved-crm')."""
-    return send_to_crm_impl(lead_id, fields, destination, run_id)
+    return send_to_crm_impl(lead_id, fields, destination, _run_id(ctx))
 
 
 @mcp.tool()
-def decide_on_lead(lead_id: str, decision: str, reason: str, run_id: str | None = None) -> dict[str, Any]:
+def decide_on_lead(lead_id: str, decision: str, reason: str, ctx: Context) -> dict[str, Any]:
     """Record a qualify/disqualify decision for a lead."""
-    return decide_on_lead_impl(lead_id, decision, reason, run_id)
+    return decide_on_lead_impl(lead_id, decision, reason, _run_id(ctx))
 
 
 @mcp.tool()
-def send_email(to: str, subject: str, body: str, run_id: str | None = None) -> dict[str, Any]:
+def send_email(to: str, subject: str, body: str, ctx: Context) -> dict[str, Any]:
     """Send an outreach email (written to a fake outbox, never really sent)."""
-    return send_email_impl(to, subject, body, run_id)
+    return send_email_impl(to, subject, body, _run_id(ctx))
 
 
 # ---- admin routes for the dashboard and tests ----------------------------

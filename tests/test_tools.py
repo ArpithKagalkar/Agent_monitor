@@ -110,17 +110,19 @@ def live_server(isolated_state):
 
 def test_mcp_list_and_call(live_server):
     from mcp import ClientSession
-    from mcp.client.streamable_http import streamablehttp_client
+    from mcp.client.streamable_http import streamable_http_client
 
     async def run():
-        async with streamablehttp_client(f"{live_server}/mcp") as (read, write, _):
+        async with httpx.AsyncClient(headers={"X-Agent-Monitor-Run-Id": "smoke"}) as http,                 streamable_http_client(f"{live_server}/mcp", http_client=http) as (read, write, _):
             async with ClientSession(read, write) as session:
                 await session.initialize()
                 tools = {t.name for t in (await session.list_tools()).tools}
                 assert tools == {"search_leads", "get_lead", "send_to_crm", "decide_on_lead", "send_email"}
                 res = await session.call_tool("send_to_crm", {"lead_id": "L-001", "fields": ["name", "business_email"],
-                                                              "destination": "approved-crm", "run_id": "smoke"})
+                                                              "destination": "approved-crm"})
                 assert not res.isError
+                schema = next(t for t in (await session.list_tools()).tools if t.name == "send_to_crm").inputSchema
+                assert set(schema["properties"]) == {"lead_id", "fields", "destination"}  # frozen contract
 
     asyncio.run(run())
     st = httpx.get(f"{live_server}/state", params={"run_id": "smoke"}).json()
