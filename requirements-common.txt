@@ -1,0 +1,5 @@
+# Shared by both developers. Dev 2 can include this from requirements-demo.txt.
+pydantic==2.14.4
+httpx==0.28.1
+python-dotenv==1.2.4
+openai==3.57.0

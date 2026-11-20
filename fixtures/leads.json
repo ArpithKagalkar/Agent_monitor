@@ -1,0 +1,12 @@
+[
+  {"lead_id":"L-001","name":"Synthetic Contact 01","business_email":"contact01@northlab.example","company":"Northlab Demo","city":"Berlin","sector":"startup","field_labels":{"name":"personal","business_email":"business_contact"}},
+  {"lead_id":"L-002","name":"Synthetic Contact 02","business_email":"contact02@pixelgrove.example","company":"Pixelgrove Demo","city":"Berlin","sector":"startup","field_labels":{"name":"personal","business_email":"business_contact"}},
+  {"lead_id":"L-003","name":"Synthetic Contact 03","business_email":"contact03@circuitnest.example","company":"Circuitnest Demo","city":"Berlin","sector":"startup","health_note":"SYNTHETIC_HEALTH_NOTE_003","field_labels":{"name":"personal","business_email":"business_contact","health_note":"special_category_health"}},
+  {"lead_id":"L-004","name":"Synthetic Contact 04","business_email":"contact04@rivergrid.example","company":"Rivergrid Demo","city":"Berlin","sector":"startup","religion_note":"SYNTHETIC_RELIGION_NOTE_004","field_labels":{"name":"personal","business_email":"business_contact","religion_note":"special_category_religion"}},
+  {"lead_id":"L-005","name":"Synthetic Contact 05","business_email":"contact05@orbitlane.example","company":"Orbitlane Demo","city":"Berlin","sector":"startup","field_labels":{"name":"personal","business_email":"business_contact"}},
+  {"lead_id":"L-006","name":"Synthetic Contact 06","business_email":"contact06@seedframe.example","company":"Seedframe Demo","city":"Berlin","sector":"startup","field_labels":{"name":"personal","business_email":"business_contact"}},
+  {"lead_id":"L-007","name":"Synthetic Contact 07","business_email":"contact07@cloudfern.example","company":"Cloudfern Demo","city":"Berlin","sector":"startup","field_labels":{"name":"personal","business_email":"business_contact"}},
+  {"lead_id":"L-008","name":"Synthetic Contact 08","business_email":"contact08@brightcoil.example","company":"Brightcoil Demo","city":"Berlin","sector":"startup","field_labels":{"name":"personal","business_email":"business_contact"}},
+  {"lead_id":"L-009","name":"Synthetic Contact 09","business_email":"contact09@mintsignal.example","company":"Mintsignal Demo","city":"Berlin","sector":"startup","field_labels":{"name":"personal","business_email":"business_contact"}},
+  {"lead_id":"L-010","name":"Synthetic Contact 10","business_email":"contact10@loopfield.example","company":"Loopfield Demo","city":"Berlin","sector":"startup","field_labels":{"name":"personal","business_email":"business_contact"}}
+]

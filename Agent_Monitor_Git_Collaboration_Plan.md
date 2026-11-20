@@ -1,4 +1,22 @@
-# Agent Monitor — Two-Developer Git Collaboration Plan
+# Agent Monitor — Current collaboration plan
+
+## Current agreement (20 November 2026)
+
+The user has chosen one implementation owner: Developer One and Codex build the
+full core application. Developer Two can handle demo preparation, exploratory
+testing, and presentation work. This supersedes the archived plan below,
+including its file ownership, contract signoff, and two-feature-branch rules.
+
+Developer One owns all components, schemas, tests, dependencies, and docs. Shared
+schemas remain the source of truth; update their producers and consumers
+together. Do not commit, push, or open PRs until the user explicitly asks.
+
+All live inference still uses Otari. Protected calls still pass through the MCP
+gateway before execution. Use synthetic data, redacted evidence, actual execution
+outcomes, and returned usage only. PDF, Slack, extra models, and cloud deployment
+remain deferred until the P0 demo is verified.
+
+## Archived two-developer plan (superseded)
 
 **Purpose:** Develop the Mozilla Otari hackathon prototype in parallel with minimal merge conflicts and predictable integration.
 

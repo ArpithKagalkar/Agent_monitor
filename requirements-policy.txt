@@ -1,0 +1,7 @@
+-r requirements-common.txt
+
+fastapi==0.165.0
+uvicorn==0.54.0
+mcp==2.3.0
+anyio==4.16.0
+pytest==9.2.0

@@ -1,0 +1,5 @@
+-r requirements-common.txt
+mcp==2.3.0
+langgraph==1.2.24
+streamlit==1.67.0
+pillow==13.0.0

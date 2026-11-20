@@ -1,0 +1,12 @@
+[
+  {"lead_id":"L-001","company_fit":70,"outreach_readiness":80},
+  {"lead_id":"L-002","company_fit":60,"outreach_readiness":75},
+  {"lead_id":"L-003","company_fit":95,"outreach_readiness":90},
+  {"lead_id":"L-004","company_fit":65,"outreach_readiness":70},
+  {"lead_id":"L-005","company_fit":80,"outreach_readiness":75},
+  {"lead_id":"L-006","company_fit":55,"outreach_readiness":65},
+  {"lead_id":"L-007","company_fit":75,"outreach_readiness":80},
+  {"lead_id":"L-008","company_fit":70,"outreach_readiness":60},
+  {"lead_id":"L-009","company_fit":85,"outreach_readiness":80},
+  {"lead_id":"L-010","company_fit":60,"outreach_readiness":60}
+]

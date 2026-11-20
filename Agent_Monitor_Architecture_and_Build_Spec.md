@@ -1,5 +1,11 @@
 # AGENT MONITOR — Architecture and implementation contract
 
+> **Ownership update (20 November 2026):** Developer One and Codex now own all
+> core implementation, as requested by the user. Developer Two can focus on demo
+> preparation, exploratory testing, and presentation work. This supersedes the
+> two-developer ownership and branching restrictions below. Shared schemas remain
+> the source of truth; update all affected components together when they change.
+
 **Project:** Agent Monitor  
 **Challenge:** Mozilla / Otari hackathon bounty  
 **Team:** 2 developers  
