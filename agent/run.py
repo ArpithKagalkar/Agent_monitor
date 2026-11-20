@@ -173,6 +173,15 @@ def build_graph(session, bound_llm, rec: Recorder, model_name: str | None):
     return g.compile()
 
 
+def _describe(exc: BaseException, url: str) -> str:
+    """Unwrap anyio ExceptionGroups so the dashboard shows the real cause."""
+    while isinstance(exc, BaseExceptionGroup) and exc.exceptions:
+        exc = exc.exceptions[0]
+    if isinstance(exc, httpx.ConnectError):
+        return f"MCP endpoint unreachable at {url}; nothing was executed"
+    return f"{type(exc).__name__}: {exc}"
+
+
 def _finish(store: Store, settings: config.Settings, rec: Recorder, status: str,
             final_answer: str | None = None, error: str | None = None) -> dict[str, Any]:
     verified = verified_executions(settings, rec.run_id)
@@ -209,8 +218,9 @@ async def run_agent(task: str = DEFAULT_TASK, mode: str = "protected", *, settin
         return _finish(store, settings, rec, "completed", final_answer=final)
     except Exception as exc:
         # In protected mode an unreachable gateway lands here: the run fails closed, nothing is forwarded.
-        rec.info(f"Run failed: {type(exc).__name__}: {exc}")
-        return _finish(store, settings, rec, "failed", error=f"{type(exc).__name__}: {exc}")
+        err = _describe(exc, settings.mcp_url(mode))
+        rec.info(f"Run failed: {err}")
+        return _finish(store, settings, rec, "failed", error=err)
 
 
 async def run_enforcement_test(mode: str = "protected", *, settings: config.Settings | None = None,
@@ -228,8 +238,9 @@ async def run_enforcement_test(mode: str = "protected", *, settings: config.Sett
         answer = f"violating call: {first.outcome}; compliant call: {second.outcome}"
         return _finish(store, settings, rec, "completed", final_answer=answer)
     except Exception as exc:
-        rec.info(f"Run failed: {type(exc).__name__}: {exc}")
-        return _finish(store, settings, rec, "failed", error=f"{type(exc).__name__}: {exc}")
+        err = _describe(exc, settings.mcp_url(mode))
+        rec.info(f"Run failed: {err}")
+        return _finish(store, settings, rec, "failed", error=err)
 
 
 def main(argv: list[str] | None = None) -> int:
